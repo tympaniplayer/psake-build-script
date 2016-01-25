@@ -10,7 +10,10 @@
 	$buildPlatform = "Any CPU"
 }
 
-FormatTaskName "`r`n`r`----------------Executing {0} Task--------------"
+FormatTaskName {
+    param($taskName)
+    Write-Host ("`r`n`r`n" + ("-"*25) + "$taskName" + ("-"*25)) -ForegroundColor Green
+}
 
 task default -depends Test
 
@@ -43,7 +46,7 @@ task Compile -depends Init `
              -requiredVariables solutionFile, buildConfiguration, buildPlatform, temporaryOutputDirectory {
 	Write-Host "Building solution $solutionFile"
 	Exec {
-        msbuild $solutionFile "/p:Configuration=$buildConfiguration;Platform=$buildPlatform;OutDir=$temporaryOutputDirectory"
+        msbuild $solutionFile "/p:Configuration=$buildConfiguration;Platform=$buildPlatform;OutDir=$temporaryOutputDirectory" "/v:quiet"
     }
 }
 
